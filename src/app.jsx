@@ -1,52 +1,6 @@
 import { useState } from "react";
-
-function SearchForm(props) {
-  const { onSubmit } = props;
-  const [currency, setCurrency] = useState("");
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (currency.trim().length) {
-      onSubmit(currency);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        required
-        value={currency}
-        onChange={(event) => setCurrency(event.target.value)}
-        aria-label="Currency"
-      />
-      <button type="submit">Search</button>
-    </form>
-  );
-}
-
-function Results(props) {
-  const { rates } = props;
-
-  return (
-    <div>
-      {rates ? (
-        <table>
-          <tbody>
-            {Object.keys(rates).map((rate) => (
-              <tr key={rate}>
-                <th style={{ textAlign: "left", paddingRight: 16 }}>{rate}</th>
-                <td>{rates[rate]}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <i>No exchange rates loaded yet. Try searching first</i>
-      )}
-    </div>
-  );
-}
+import { SearchForm } from "./components/search-form";
+import { SearchResults } from "./components/search-results";
 
 export function App() {
   const [rates, setRates] = useState(null);
@@ -64,7 +18,7 @@ export function App() {
         <h2>Search by currency</h2>
         <SearchForm onSubmit={search} />
         <h2>Results</h2>
-        <Results rates={rates} />
+        <SearchResults rates={rates} />
       </main>
       <footer>
         <i>ExchangeRates &copy; 2023 Marek Zelinka</i>
