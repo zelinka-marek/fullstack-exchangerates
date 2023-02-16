@@ -1,16 +1,37 @@
 import { useState } from "react";
 
-export function App() {
+function SearchForm(props) {
+  const { onSubmit } = props;
   const [currency, setCurrency] = useState("");
-  const [rates, setRates] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (currency.trim().length) {
-      fetch(`https://open.er-api.com/v6/latest/${currency}`)
-        .then((response) => response.json())
-        .then((data) => setRates(data.rates));
+      onSubmit(currency);
     }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        required
+        value={currency}
+        onChange={(event) => setCurrency(event.target.value)}
+        aria-label="Currency"
+      />
+      <button type="submit">Search</button>
+    </form>
+  );
+}
+
+export function App() {
+  const [rates, setRates] = useState(null);
+
+  const search = (currency) => {
+    fetch(`https://open.er-api.com/v6/latest/${currency}`)
+      .then((response) => response.json())
+      .then((data) => setRates(data.rates));
   };
 
   return (
@@ -18,16 +39,7 @@ export function App() {
       <main>
         <h1>Exchange Rates</h1>
         <h2>Search by currency</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            required
-            value={currency}
-            onChange={(event) => setCurrency(event.target.value)}
-            aria-label="Currency"
-          />
-          <button type="submit">Search</button>
-        </form>
+        <SearchForm onSubmit={search} />
         <h2>Results</h2>
         {rates ? (
           <table>
