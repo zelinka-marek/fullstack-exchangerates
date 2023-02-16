@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { SearchForm } from "./components/search-form";
 import { SearchResults } from "./components/search-results";
+import { getExchangeRates } from "./servies/exchange";
 
 export function App() {
   const [rates, setRates] = useState(null);
 
   const search = (currency) => {
-    fetch(`https://open.er-api.com/v6/latest/${currency}`)
-      .then((response) => response.json())
-      .then((data) => setRates(data.rates));
+    getExchangeRates(currency).then(setRates);
   };
 
   return (
