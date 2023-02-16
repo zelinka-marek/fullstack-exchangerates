@@ -25,6 +25,29 @@ function SearchForm(props) {
   );
 }
 
+function Results(props) {
+  const { rates } = props;
+
+  return (
+    <div>
+      {rates ? (
+        <table>
+          <tbody>
+            {Object.keys(rates).map((rate) => (
+              <tr key={rate}>
+                <th style={{ textAlign: "left", paddingRight: 16 }}>{rate}</th>
+                <td>{rates[rate]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <i>No exchange rates loaded yet. Try searching first</i>
+      )}
+    </div>
+  );
+}
+
 export function App() {
   const [rates, setRates] = useState(null);
 
@@ -41,22 +64,7 @@ export function App() {
         <h2>Search by currency</h2>
         <SearchForm onSubmit={search} />
         <h2>Results</h2>
-        {rates ? (
-          <table>
-            <tbody>
-              {Object.keys(rates).map((rate) => (
-                <tr key={rate}>
-                  <th style={{ textAlign: "left", paddingRight: 16 }}>
-                    {rate}
-                  </th>
-                  <td>{rates[rate]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <i>No exchange rates loaded yet. Try searching first</i>
-        )}
+        <Results rates={rates} />
       </main>
       <footer>
         <i>ExchangeRates &copy; 2023 Marek Zelinka</i>
